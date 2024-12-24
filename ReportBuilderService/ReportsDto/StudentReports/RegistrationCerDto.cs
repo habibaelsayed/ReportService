@@ -19,10 +19,11 @@ namespace ReportBuilderService.ReportsDto.StudentReports
         public string Dean { get; set; }
         public DateTime? Date { get; set; }
         public string? NationalId { get; set; }
-        public string? MilitaryId { get; set; }
+        //public string? MilitaryId { get; set; }
         public string? reason { get; set; }
-
-
+        public int? MilTriple1 { get; set; }
+        public int? MilTriple2 { get; set; }
+        public int? MilTriple3 { get; set; }
 
 
     }

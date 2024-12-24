@@ -23,5 +23,6 @@ namespace ReportBuilderService.ReportsDto.StudentReports
         public string Phone { get; set; }
         public string NationalId { get; set; }
         public DateTime Date { get; set; }
+        public string Image { get; set; }
     }
 }

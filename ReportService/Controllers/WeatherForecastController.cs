@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using ReportBuilderService;
 using ReportBuilderService.ReportBuilder;
 using ReportBuilderService.ReportsDto.CommittieRport;
 using ReportBuilderService.ReportsDto.StudentReports;
-using System.Drawing.Drawing2D;
-using static iTextSharp.text.pdf.AcroFields;
 
 namespace ReportService.Controllers
 {
@@ -149,7 +146,7 @@ namespace ReportService.Controllers
                 FeeDistype = new FeeDistypeDataSources() { DataList = studentExpensesDto.studentExpenses.feeDistypes }
             };
 
-            if(studentExpensesReport == null)
+            if (studentExpensesReport == null)
             {
                 return BadRequest();
             }
@@ -178,44 +175,45 @@ namespace ReportService.Controllers
 
         }
 
-        //[HttpPost("StudentsCourse")]
-        //public IActionResult GetStudentsCourse(CourseDto courseDto)
-        //{
-        //    StudentsCourseReportDto studentsCourseReport = new StudentsCourseReportDto
-        //    {
-        //        CourseGenralInformation = new CourseGeneralInfoDataSources { DataList =  courseDto.CourseInfo },
-        //        CommitteStudentformationDto = new CommitteStudentformationDtoDataSources { DataList =  courseDto.Students }
+        [HttpPost("StudentsCourse")]
+        public IActionResult GetStudentsCourse(CourseDto courseDto)
+        {
+            StudentsCourseReportDto studentsCourseReport = new StudentsCourseReportDto
+            {
+                CourseGenralInformation = new CourseGeneralInfoDataSources { DataList = new List<CourseGeneralInformationDto> { courseDto.CourseInfo } },
+                CommitteStudentformationDto = new CommitteStudentformationDtoDataSources { DataList =  courseDto.Students }
 
-        //    };
-
-            
-        //    if (studentsCourseReport == null)
-        //    {
-
-        //        return BadRequest();
-        //    }
-
-        //    var x = new List<DataSource>();
-        //    var onereport = new ReportParametersDto { ReportName = studentsCourseReport.FileName };
-
-        //    var listStudentsCourse = new List<CourseGeneralInformationDto>() { studentsCourseReport.CourseGenralInformation.DataList };
-
-        //    x.Add(new DataSource { DataSetName = studentsCourseReport.CommitteStudentformationDto.DataSourceName, DataList = studentsCourseReport.CommitteStudentformationDto.DataList });
-        //    x.Add(new DataSource { DataSetName = studentsCourseReport.CourseGenralInformation.DataSourceName, DataList = listStudentsCourse});
-
-        //    onereport.dataSources = x;
-
-        //    var reports = new List<ReportParametersDto>();
-
-        //    reports.Add(onereport);
-            
-        //    var Reports = RdlReport.GetReportPdfDataAsync(reports);
+            };
 
 
-        //    return Ok(Reports);
+            if (studentsCourseReport == null)
+            {
+
+                return BadRequest();
+            }
+
+            var x = new List<DataSource>();
+            var onereport = new ReportParametersDto { ReportName = studentsCourseReport.FileName };
+            //var listCourseInfo = new List<CourseGeneralInformationDto> { }
+
+            //var listStudentsCourse = new List<CourseGeneralInformationDto>() { studentsCourseReport.CourseGenralInformation.DataList  };
+
+            x.Add(new DataSource { DataSetName = studentsCourseReport.CommitteStudentformationDto.DataSourceName, DataList = studentsCourseReport.CommitteStudentformationDto.DataList });
+            x.Add(new DataSource { DataSetName = studentsCourseReport.CourseGenralInformation.DataSourceName, DataList = studentsCourseReport.CourseGenralInformation.DataList });
+
+            onereport.dataSources = x;
+
+            var reports = new List<ReportParametersDto>();
+
+            reports.Add(onereport);
+
+            var Reports = RdlReport.GetReportPdfDataAsync(reports);
 
 
-        //}
+            return Ok(Reports);
+
+
+        }
 
         [HttpPost("StudentsCourseWithSec")]
         public IActionResult GetStudentsCourseWithSec(List<CourseDto> courseDto)
@@ -301,6 +299,30 @@ namespace ReportService.Controllers
 
         }
 
+        [HttpPost("AcdnoReport")]
+        public async Task<IActionResult> GetAcdnoReport(AcdnoReportDto acdnoReport)
+        {
+            AcdReportDto acdReportDto = new AcdReportDto
+            {
+                acdnoDataSources = new AcdnoDataSources { DataList = acdnoReport }
+            };
+            if (acdReportDto==null)
+                return BadRequest();
+
+            var x = new List<DataSource>();
+            var onereport = new ReportParametersDto { ReportName = acdReportDto.FileName };
+            var listAcdno = new List<AcdnoReportDto> { acdReportDto.acdnoDataSources.DataList };
+            x.Add(new DataSource { DataSetName = acdReportDto.acdnoDataSources.DataSourceName, DataList = listAcdno });
+            onereport.dataSources= x;
+
+            var reports = new List<ReportParametersDto>();
+            reports.Add(onereport);
+            var Reports = RdlReport.GetReportPdfDataAsync(reports);
+            return Ok(Reports);
+
+        }
+
+
         [HttpPost("RegistrationCerm")]
 
         public async Task<IActionResult> GetRegistrationCerm(RegistrationCerDto registrationCerDto)
@@ -333,9 +355,9 @@ namespace ReportService.Controllers
         [HttpPost("SahbMalafReport")]
         public IActionResult GetSahbMalafReport(SahbMalafDto sahbMalafDto)
         {
-            SahbMalafReportDto sahbMalafReportDto = new SahbMalafReportDto 
+            SahbMalafReportDto sahbMalafReportDto = new SahbMalafReportDto
             {
-                sabhMalafDataSources=new SabhMalafDataSources{DataList=sahbMalafDto }
+                sabhMalafDataSources=new SabhMalafDataSources { DataList=sahbMalafDto }
             };
 
             if (sahbMalafReportDto == null)
@@ -368,7 +390,7 @@ namespace ReportService.Controllers
 
             StudentCardReportIhmiDto studentCardReport = new StudentCardReportIhmiDto()
             {
-                StudentCardDto = new StudentCardDataSource() { DataList = studentCardDto}
+                StudentCardDto = new StudentCardDataSource() { DataList = studentCardDto }
             };
 
             if (studentCardReport == null) return BadRequest();
@@ -379,7 +401,7 @@ namespace ReportService.Controllers
 
             var oneReport = new ReportParametersDto { ReportName = studentCardReport.FileName };
 
-            x.Add(new DataSource{ DataSetName =  studentCardReport.StudentCardDto.DataSourceName, DataList = listOfStudentCards });
+            x.Add(new DataSource { DataSetName =  studentCardReport.StudentCardDto.DataSourceName, DataList = listOfStudentCards });
 
             oneReport.dataSources = x;
 
@@ -460,7 +482,7 @@ namespace ReportService.Controllers
 
 
         }
-      
+
 
 
         [HttpPost("GetGovReport")]
@@ -502,35 +524,7 @@ namespace ReportService.Controllers
                 para.Add(onereport);
 
             }
-            //   var content = JsonConvert.DeserializeObject<List<ReportParametersDto>>(ReportParametersDto.data);
-
-            //foreach (var item in content)
-            //{
-            //    Console.WriteLine(item.ReportName);
-            //    foreach (var itemm in item.dataSources)
-            //    {
-            //        Console.WriteLine(itemm.DataSetName); 
-            //        if (itemm.DataSetName == "DataSet2")
-            //        {
-
-            //        var z =     itemm.DataList as List<CommitteGenralInformationDto>;
-            //            foreach (var item2 in z)
-            //            {
-            //                Console.WriteLine( item2.CourseName );
-            //                Console.WriteLine(item2.CourseName);
-
-            //            }
-
-            //        }
-
-            //    };
-
-            //}
-
             var Reports = RdlReport.GetReportPdfDataAsync2(para);
-            //  System.IO.File.WriteAllBytes(@"C:\Users\Administrator\source\repos\ReportService\ReportBuilderService\reportfile\report11252.pdf", Reports);
-
-
             return Ok(Reports);
 
         }
@@ -545,13 +539,13 @@ namespace ReportService.Controllers
         public async Task<IActionResult> GetAllReport(List<byte[]> bytes)
         {
             var final = RdlReport.concatAndAddContent(bytes);
-              System.IO.File.WriteAllBytes(@"C:\Users\Administrator\source\repos\ReportService\ReportBuilderService\reportfile\report11252.pdf", final);
+            System.IO.File.WriteAllBytes(@"C:\Users\Administrator\source\repos\ReportService\ReportBuilderService\reportfile\report11252.pdf", final);
 
             return Ok(final);
         }
 
 
-            [HttpGet]
+        [HttpGet]
         [Route("tests")]
         //    [Authorize(Roles = "Control,Admin")]
         public async Task<IActionResult> tests()
@@ -561,7 +555,7 @@ namespace ReportService.Controllers
             {
                 if (DateTime.Now.Minute < x.Minute)
                 {
-                    await Console.Out.WriteLineAsync(   DateTime.Now.ToString());
+                    await Console.Out.WriteLineAsync(DateTime.Now.ToString());
 
                 }
 
@@ -575,9 +569,9 @@ namespace ReportService.Controllers
 
 
     }
- public class dd
+    public class dd
     {
-        
-        public string data { get; set; }    
+
+        public string data { get; set; }
     }
 }

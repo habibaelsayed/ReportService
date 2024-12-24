@@ -91,6 +91,17 @@ namespace ReportBuilderService.ReportsDto.CommittieRport
 
     }
 
+    public class AcdnoDataSources : GeneralDataSource2<AcdnoReportDto>
+    {
+        public override string DataSourceName
+        {
+            get
+            {
+                return "DataSet1";
+            }
+        }
+    }
+
 
     public class StudentCardDataSource : GeneralDataSource2<StudentCardDto>
     {
@@ -220,6 +231,19 @@ namespace ReportBuilderService.ReportsDto.CommittieRport
         }
         public RegistrationCerDataSource registrationCerDataSource { get; set; }
     }
+
+    public class AcdReportDto : GenralReportDto
+    {
+        public override string FileName
+        {
+            get
+            {
+                return "acdno";
+            }
+        }
+        public AcdnoDataSources acdnoDataSources { get; set; }
+    }
+
 
     public class RegistrationCerReportmDto : GenralReportDto
     {

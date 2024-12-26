@@ -10,7 +10,7 @@ namespace ReportService.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        //   [HttpPost("GetReport")] 
+        //   [HttpPost("GetReport")]
 
         //  public async Task<IActionResult> GetReport( List<CommitteDto>   committeDtos   )
         //   {
@@ -83,7 +83,6 @@ namespace ReportService.Controllers
         //   }
 
 
-
         [HttpPost("GetReport")]
         public IActionResult GetReport(List<StudentsCommittes>? studentsCommittes)
         {
@@ -133,6 +132,54 @@ namespace ReportService.Controllers
         }
 
 
+        [HttpPost("StudentsDegreeCounts")]
+        public IActionResult GetStudentsDegreeCounts(List<StudentsDegreesDto> studentsDegreesDtos)
+        {
+            List<StudentDegreesReportDto> studentDegreesReportDtos = new List<StudentDegreesReportDto>();
+            foreach (var studentDegreesDto in studentsDegreesDtos)
+            {
+                var oneport = new StudentDegreesReportDto
+                {
+                    
+                    studnetSummeryDtoDataSource = new StudnetSummeryDtoDataSource { DataList =   studentDegreesDto.Counts }
+                    ,studentDegreesDtoData = new StudentDegreesDtoDataSource
+                    {
+                        DataList = new List<BranchCounts> { studentDegreesDto.Branch }
+                    }
+                };
+                studentDegreesReportDtos.Add(oneport);
+
+            }
+            if (studentDegreesReportDtos == null)
+            {
+                return BadRequest();
+            }
+            var para = new List<ReportParametersDto>();
+            if (studentDegreesReportDtos.Count < 0)
+            {
+
+                return BadRequest();
+            }
+            foreach (var item in studentDegreesReportDtos)
+            {
+                var x = new List<DataSource>();
+                var onereport = new ReportParametersDto { ReportName = item.FileName };
+
+
+                x.Add(new DataSource { DataSetName = item.studentDegreesDtoData.DataSourceName, DataList = item.studentDegreesDtoData.DataList });
+                x.Add(new DataSource { DataSetName = item.studnetSummeryDtoDataSource.DataSourceName, DataList=item.studnetSummeryDtoDataSource.DataList });
+
+                onereport.dataSources = x;
+                para.Add(onereport);
+
+            }
+
+            var Reports = RdlReport.GetReportPdfDataAsync(para);
+
+
+            return Ok(Reports);
+
+        }
         [HttpPost("GetStudentFinancialStatusReport")]
         public IActionResult GetStudentFinancialStatusReport(AllStudentExpensesDto studentExpensesDto)
         {
@@ -269,6 +316,7 @@ namespace ReportService.Controllers
 
 
         }
+
 
         [HttpPost("RegistrationCerf")]
 

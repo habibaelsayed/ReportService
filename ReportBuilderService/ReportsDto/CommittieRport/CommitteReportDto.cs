@@ -54,6 +54,27 @@ namespace ReportBuilderService.ReportsDto.CommittieRport
 
     }
 
+    public class StudentDegreesDtoDataSource : GenralDataSource<BranchCounts>
+    {
+        public override string DataSourceName
+        {
+            get
+            {
+                return "DataSet1";
+            }
+        }
+
+    }
+    public class StudnetSummeryDtoDataSource : GenralDataSource<StudentSummary>
+    {
+        public override string DataSourceName
+        {
+            get
+            {
+                return "DataSet2";
+            }
+        }
+    }
     public class CourseGeneralInfoDataSources : GenralDataSource<CourseGeneralInformationDto>
     {
         public override string DataSourceName
@@ -191,6 +212,15 @@ namespace ReportBuilderService.ReportsDto.CommittieRport
         public CommitteStudentformationDtoDataSources CommitteStudentformationDto { get; set; }
     }
 
+    public class StudentDegreesReportDto:GenralReportDto
+    {
+        public override string FileName
+        {
+            get { return "studegrees"; }
+        }
+        public StudentDegreesDtoDataSource studentDegreesDtoData { get; set; }
+        public StudnetSummeryDtoDataSource studnetSummeryDtoDataSource { get; set; }
+    }
     public class StudentsCourseReportiiDto : GenralReportDto
     {
         public override string FileName
